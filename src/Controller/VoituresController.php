@@ -9,14 +9,25 @@ use Symfony\Component\Routing\Attribute\Route;
 
 final class VoituresController extends AbstractController
 {
-    #[Route('/', name: 'app_home', methods: ['GET'])]
-    public function index(VoitureRepository $voitures): Response
-    {
-        $voitures = $voitures->findAll();
+    public function __construct(private VoitureRepository $voitureRepository) {}
 
-        return $this->render('voitures/accueil.html.twig', [
-            'controller_name' => 'VoituresController',
+    #[Route('/', name: 'app_home', methods: ['GET'])]
+    public function index(): Response
+    {
+        $voitures = $this->voitureRepository->findAll();
+
+        return $this->render('accueil.html.twig', [
             'voitures' => $voitures,
+        ]);
+    }
+
+    #[Route('/voiture/{id}', name: 'app_car_show', methods: ['GET'])]
+    public function voiture(int $id): Response
+    {
+        $voiture = $this->voitureRepository->find($id);
+
+        return $this->render('voitures/show.html.twig', [
+            'voiture' => $voiture,
         ]);
     }
 }
