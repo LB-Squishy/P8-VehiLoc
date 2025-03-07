@@ -26,6 +26,10 @@ final class VoituresController extends AbstractController
     {
         $voiture = $this->voitureRepository->find($id);
 
+        if (!$voiture) {
+            return $this->redirectToRoute('app_home');
+        }
+
         return $this->render('voitures/show.html.twig', [
             'voiture' => $voiture,
         ]);
