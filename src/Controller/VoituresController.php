@@ -2,9 +2,12 @@
 
 namespace App\Controller;
 
+use App\Entity\Voiture;
+use App\Form\VoitureType;
 use App\Repository\VoitureRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
@@ -22,6 +25,17 @@ final class VoituresController extends AbstractController
 
         return $this->render('accueil.html.twig', [
             'voitures' => $voitures,
+        ]);
+    }
+
+    #[Route('/voiture/add', name: 'app_car_add', methods: ['GET', 'POST'])]
+    public function addVoiture(Request $request): Response
+    {
+        $voiture = new Voiture();
+        $form = $this->createForm(VoitureType::class, $voiture);
+
+        return $this->render('voitures/add.html.twig', [
+            'form' => $form,
         ]);
     }
 
