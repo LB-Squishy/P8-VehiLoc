@@ -33,6 +33,13 @@ final class VoituresController extends AbstractController
     {
         $voiture = new Voiture();
         $form = $this->createForm(VoitureType::class, $voiture);
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $voiture = $form->getData();
+            $this->entityManagerInterface->persist($voiture);
+            $this->entityManagerInterface->flush();
+            return $this->redirectToRoute('app_car_show', ['id' => $voiture->getId()]);
+        }
 
         return $this->render('voitures/add.html.twig', [
             'form' => $form,
